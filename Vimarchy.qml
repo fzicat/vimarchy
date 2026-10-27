@@ -426,10 +426,10 @@ Item {
             opacity: root.exiting
               ? (windowHint.modelData.hint === root.selectedHint ? root.exitOpacity : 0)
               : 1
-            color: Qt.rgba(windowHint.accentColor.r, windowHint.accentColor.g,
-              windowHint.accentColor.b,
-              windowHint.modelData.hint === root.swapSourceHint || windowHint.modelData.hint === root.selectedHint
-                ? 0.50 : 0)
+            visible: windowHint.modelData.hint === root.swapSourceHint || windowHint.modelData.hint === root.selectedHint
+            color: "transparent"
+            border.width: Math.max(2, Style.space(2))
+            border.color: windowHint.accentColor
             radius: Style.cornerRadius
           }
 
