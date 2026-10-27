@@ -26,11 +26,8 @@ Item {
   readonly property bool swapMode: swapSourceHint !== ""
   property int loadGeneration: 0
   property string hintKeys: "tnseriaoplfuywqdhcxz"
-  readonly property var hintPalette: [
-    "#818cf8", "#a78bfa", "#c084fc", "#e879f9", "#f472b6",
-    "#fb7185", "#fb923c", "#facc15", "#a3e635", "#4ade80",
-    "#2dd4bf", "#22d3ee", "#38bdf8", "#60a5fa"
-  ]
+  readonly property var hintPalette: ["#ebdbb2"]
+  readonly property color hintTextColor: "#1d2021"
   readonly property string snapshotPath: Qt.resolvedUrl("bin/current").toString().replace("file://", "")
   readonly property string cancelPath: Qt.resolvedUrl("bin/cancel").toString().replace("file://", "")
   readonly property string settingsPath: Quickshell.env("HOME") + "/.config/omarchy/vimarchy.json"
@@ -432,17 +429,8 @@ Item {
             color: Qt.rgba(windowHint.accentColor.r, windowHint.accentColor.g,
               windowHint.accentColor.b,
               windowHint.modelData.hint === root.swapSourceHint || windowHint.modelData.hint === root.selectedHint
-                ? 0.50 : root.windowTintOpacity)
+                ? 0.50 : 0)
             radius: Style.cornerRadius
-          }
-
-          Rectangle {
-            anchors.fill: parent
-            color: "transparent"
-            border.width: Math.max(2, Style.space(2))
-            border.color: windowHint.accentColor
-            radius: Style.cornerRadius
-            opacity: root.exiting ? 0 : 1
           }
 
           Rectangle {
@@ -491,14 +479,12 @@ Item {
             height: windowHint.badgeSize
             radius: width / 2
             opacity: root.exiting ? 0 : 1
-            color: Qt.rgba(windowHint.accentColor.r, windowHint.accentColor.g,
-              windowHint.accentColor.b,
-              windowHint.modelData.hint === root.selectedHint ? 0.50 : root.badgeTintOpacity)
+            color: windowHint.accentColor
 
             Text {
               anchors.centerIn: parent
               text: windowHint.modelData.hint.toUpperCase()
-              color: windowHint.accentColor
+              color: root.hintTextColor
               font.family: Style.font.menuFamily
               font.pixelSize: Math.round(badge.height * (text.length > 1 ? 0.46 : 0.62))
               font.bold: true
@@ -529,7 +515,7 @@ Item {
           width: Style.space(48) * root.hintScale
           height: width
           radius: width / 2
-          color: Qt.rgba(accent.r, accent.g, accent.b, root.badgeTintOpacity)
+          color: accent
           border.width: Math.max(1, Style.space(2) * root.hintScale)
           border.color: accent
           opacity: root.workspaceSpread
@@ -537,7 +523,7 @@ Item {
           Text {
             anchors.centerIn: parent
             text: parent.modelData.toUpperCase()
-            color: parent.accent
+            color: root.hintTextColor
             font.family: Style.font.menuFamily
             font.pixelSize: Style.space(28) * root.hintScale
             font.bold: true
