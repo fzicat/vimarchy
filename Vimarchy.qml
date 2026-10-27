@@ -25,7 +25,7 @@ Item {
   readonly property bool exiting: selectedHint !== ""
   readonly property bool swapMode: swapSourceHint !== ""
   property int loadGeneration: 0
-  property string hintKeys: "asdfghjklqwertyuiopzxcvbnm"
+  property string hintKeys: "pfwqluyjazxcvgbmeiokh"
   readonly property var hintPalette: [
     "#818cf8", "#a78bfa", "#c084fc", "#e879f9", "#f472b6",
     "#fb7185", "#fb923c", "#facc15", "#a3e635", "#4ade80",
