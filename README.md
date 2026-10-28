@@ -17,7 +17,7 @@ hints to focus, swap, pair, or group windows directly through Hyprland.
 | Alt + hold a window hint | **Workspace radial** | Open an animated ring of workspace hints around that window's hint. |
 | Tap `1`–`0` or `S` in the radial | **Move and follow** | Move the source window to the destination and follow it. Release Alt before tapping. |
 | Alt + tap `1`–`0` or `S` in the radial | **Move without following** | Send the source window to the destination while staying where you are. |
-| Double-tap a hint | **Focus action** | Run the action configured for the current layout. By default, `dwindle` and `scrolling` toggle a full working-area view, while `master` promotes the window to master. |
+| Double-tap a hint | **Swap source** | Make that window the swap source, as if its hint were held. Tap another hint to swap, or hold it to run the hold action. Configurable per layout through `doubleTap.layouts`. |
 | Alt + double-tap a hint | **Alternate focus action** | Toggle a full working-area view (not fullscreen) in any layout. Configurable independently through `altDoubleTap.layouts`. |
 | Hold a hint, then tap another | **Swap** | Exchange the two windows' tiled positions. |
 | Hold a hint, then hold another | **Hold action** | Run the configured layout action. By default, `dwindle` makes the windows sibling tiles. |
@@ -307,7 +307,7 @@ layout can select a built-in action, be disabled, or invoke a command directly:
 }
 ```
 
-Built-ins are `toggle-maximized`, `promote-master`, and `disabled`. Callback
+Built-ins are `swap-source`, `toggle-maximized`, `promote-master`, and `disabled`. Callback
 commands run without an implicit shell and receive `VIMARCHY_LAYOUT`,
 `VIMARCHY_WINDOW_ADDRESS`, `VIMARCHY_WINDOW_STABLE_ID`,
 `VIMARCHY_WORKSPACE_ID`, `VIMARCHY_FULLSCREEN_STATE`, and `VIMARCHY_HINT`.

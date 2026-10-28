@@ -220,6 +220,11 @@ Item {
 
   function enterSwap(hint) {
     if (!root.windowForHint(String(hint || ""))) return "unknown"
+    // A double tap promotes the window it just selected to the swap source.
+    selectionFade.stop()
+    selectionCloseTimer.stop()
+    root.selectedHint = ""
+    root.exitOpacity = 1.0
     root.swapSourceHint = String(hint)
     root.holdingHint = ""
     root.holdProgress = 0.0

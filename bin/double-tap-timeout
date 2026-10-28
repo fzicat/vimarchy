@@ -18,4 +18,4 @@ active_submap=$(hyprctl submap 2>/dev/null | tr -d '\n')
 if [[ $active_submap == "$expected_submap" ]]; then
   hyprctl dispatch 'hl.dsp.submap("reset")' >/dev/null 2>&1 || true
 fi
-rm -f "$state_file" "$state_dir/double-tap.json.tmp"
+rm -f "$state_file" "$state_dir/double-tap.json.tmp" "$state_dir/selected-snapshot.json"

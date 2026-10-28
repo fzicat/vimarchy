@@ -16,9 +16,7 @@
   "doubleTap": {
     "timeoutMs": 280,
     "layouts": {
-      "dwindle": "toggle-maximized",
-      "scrolling": "toggle-maximized",
-      "master": "promote-master"
+      "*": "swap-source"
     }
   }
 }

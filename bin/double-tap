@@ -9,6 +9,7 @@ action_section=doubleTap
 [[ $gesture == alt ]] && action_section=altDoubleTap
 [[ $key =~ ^[a-z]$ ]] || exit 2
 
+plugin_dir=$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)
 state_dir=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/vimarchy
 state_file=$state_dir/double-tap.json
 settings_file=${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/vimarchy.json
@@ -60,8 +61,21 @@ run_maximize_toggle() {
   hyprctl dispatch "hl.dsp.window.fullscreen({ mode = \"maximized\", action = \"$operation\", layout_aware = false, window = \"address:$address\" })" >/dev/null
 }
 
+run_swap_source() {
+  # Wait for the first tap's selection to finish, then restore the snapshot
+  # it set aside and hold the hint as if it had been long-pressed.
+  exec 8>"$state_dir/select.lock"
+  flock -w 1 8 || return 0
+  hyprctl layers -j | jq -e '.. | objects | select(.namespace? == "vimarchy")' >/dev/null || return 0
+  if [[ -f $state_dir/selected-snapshot.json ]]; then
+    mv -f "$state_dir/selected-snapshot.json" "$state_dir/snapshot.json"
+  fi
+  exec "$plugin_dir/bin/hold" "$hint"
+}
+
 run_builtin() {
   case "$1" in
+    swap-source) run_swap_source ;;
     toggle-maximized) run_maximize_toggle ;;
     promote-master) hyprctl dispatch 'hl.dsp.layout("swapwithmaster master ignoremaster")' >/dev/null ;;
     disabled) return 0 ;;
@@ -74,10 +88,7 @@ if [[ -z $action ]]; then
     run_builtin toggle-maximized
     exit 0
   fi
-  case "$layout" in
-    dwindle|scrolling) run_builtin toggle-maximized ;;
-    master) run_builtin promote-master ;;
-  esac
+  run_builtin swap-source
   exit 0
 fi
 

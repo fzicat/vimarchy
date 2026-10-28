@@ -7,6 +7,12 @@ hint=${1:-}
 
 state_dir=${XDG_RUNTIME_DIR:-/run/user/$(id -u)}/vimarchy
 state_file=$state_dir/snapshot.json
+selected_file=$state_dir/selected-snapshot.json
+
+# Serialize with a double tap that promotes this selection to a swap source.
+exec 8>"$state_dir/select.lock"
+flock 8
+[[ ! -f $state_dir/swap-source.json ]] || exit 0
 
 stable_id=""
 if [[ -f $state_file ]]; then
@@ -25,9 +31,15 @@ fi
 # Keep the passive hint layer mapped for its brief selection flash.
 omarchy-shell shell call vimarchy beginSelection "$hint" >/dev/null 2>&1 || true
 
-rm -f "$state_file" "$state_dir/snapshot.json.tmp" \
+# Keep the snapshot until the double-tap window closes, so a double tap can
+# still resolve hints exactly as the overlay shows them.
+if [[ -f $state_file ]]; then
+  mv -f "$state_file" "$selected_file"
+fi
+rm -f "$state_dir/snapshot.json.tmp" \
   "$state_dir/swap-source.json" "$state_dir/swap-source.json.tmp" \
   "$state_dir/press.json" "$state_dir/press.json.tmp"
+exec 8>&-
 if [[ ! $stable_id =~ ^[0-9a-fA-F]+$ ]]; then
   exit 0
 fi
